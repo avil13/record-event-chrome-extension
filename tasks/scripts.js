@@ -32,18 +32,22 @@ gulp.task('scripts', (cb) => {
       module: {
         rules: [
           {
-            test: /\.ts$/,
+            test: /\.tsx?$/,
             loader: 'ts-loader',
             exclude: /node_modules/
           }
         ]
       },
       resolve: {
-        extensions: ['.ts', '.js'],
+        extensions: ['.ts', '.js', '.tsx', '.jsx'],
         modules: [
           'node_modules/',
           'app/scripts/'
-        ]
+        ],
+        alias: {
+          react: 'preact-compat',
+          'react-dom': 'preact-compat'
+        }
       }
     },
     webpack,
