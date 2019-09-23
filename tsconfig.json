@@ -1,13 +1,22 @@
 {
   "compilerOptions": {
-      "module": "commonjs",
-      "target": "es5",
-      "noImplicitAny": true,
-      "noImplicitUseStrict": true,
-      "noImplicitReturns": true,
-      "strictNullChecks": true,
-      "jsx": "react",
-      "jsxFactory": "h",
-      "lib": ["dom", "es2017"]
-  }
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "noImplicitUseStrict": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "lib": ["dom", "es2017"],
+    "baseUrl": "."
+  },
+  "include": [
+    "app/scripts/**/*.ts",
+    "app/scripts/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

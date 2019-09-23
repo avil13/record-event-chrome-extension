@@ -8,3 +8,4 @@ dist/
 packages/
 
 package-lock.json
+yarn-error.log
