@@ -44,7 +44,7 @@ const wait = (selector) => {
             return `${w}${el}.click();`;
 
         case events.DBLCLICK:
-            return `${w}${el}.dispatchEvent(new MouseEvent('dblclick', {
+            return `${w}  ${el}.dispatchEvent(new MouseEvent('dblclick', {
   'view': window,
   'bubbles': true,
   'cancelable': true
@@ -55,4 +55,6 @@ const wait = (selector) => {
         case events.SELECT:
             return `${w}${el}.value = '${param.value}';`;
     }
+
+    return '';
 }

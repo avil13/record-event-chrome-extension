@@ -8,7 +8,7 @@ export function getCodeByActions(list: ActionType[]) {
     result += generateCode({ event: '_start', selector: 'body' });
     result += generateCode({ event: '_wait', selector: 'body' });
 
-    result += list.map(v => '  ' + generateCode(v)).join('\n');
+    result += list.map(v => '  ' + generateCode(v)).join('\n\n');
 
     result += generateCode({ event: '_end', selector: 'body' });
 

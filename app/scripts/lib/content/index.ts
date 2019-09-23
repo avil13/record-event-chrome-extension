@@ -6,31 +6,45 @@ import { getCodeByActions } from './lib/get-code-by-actions';
 
 let actionsList: ActionType[] = [];
 
-let event;
+function watchEventCallback(ev: MouseEvent & { path: Element[] }) {
+  const { path, type, target } = ev;
+  const value = (target as HTMLInputElement).value || '';
 
-for (let k in events) {
+  actionsList.push({
+    event: type,
+    value,
+    selector: getCssPath(path),
+    location: window.location.href,
+    time: Date.now()
+  });
+
+  actionsList = normalizeActionsList(actionsList);
+
+  // console.log(getCodeByActions(actionsList));
+}
+
+export function activate() {
+  let event: string;
+
+  for (let k in events) {
     if (events.hasOwnProperty(k)) {
-        event = events[k];
-        window.addEventListener(
-            event,
-            ev => {
-                const { path, type, target } = ev;
+      // @ts-ignore
+      event = events[k];
 
-                actionsList.push({
-                    event: type,
-                    selector: getCssPath(path),
-                    value: target.value || '',
-                    location: window.location.href,
-                    time: Date.now()
-                });
-
-                actionsList = normalizeActionsList(actionsList);
-
-                // console.table(actionsList);
-
-                console.log(getCodeByActions(actionsList));
-            },
-            true
-        );
+      window.addEventListener(event, watchEventCallback, true);
     }
+  }
+}
+
+export function diactivate() {
+  let event: string;
+
+  for (let k in events) {
+    if (events.hasOwnProperty(k)) {
+      // @ts-ignore
+      event = events[k];
+
+      window.removeEventListener(event, watchEventCallback, true);
+    }
+  }
 }
