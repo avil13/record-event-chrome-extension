@@ -11,7 +11,7 @@ var z = () => 0;
 
 // Inject your application into the an element with the id
 // Make sure that such an element exists in the dom ;
-
+# code page
 const app = <div>
   <h1>Hi man</h1>
   <Code code={code}/>
@@ -23,7 +23,6 @@ export default class IndexPage extends Component {
   render() {
     return (
       <div>
-        <h1>Hi man</h1>
         <Code code={code}/>
       </div>
     );

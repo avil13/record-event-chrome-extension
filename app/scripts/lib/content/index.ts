@@ -20,10 +20,18 @@ function watchEventCallback(ev: MouseEvent & { path: Element[] }) {
 
   actionsList = normalizeActionsList(actionsList);
 
+  watchEventCallback.callBack(actionsList);
+
   // console.log(getCodeByActions(actionsList));
 }
 
-export function activate(callback: (data: any) => void) {
+watchEventCallback.callBack = (dataTypes: ActionType[]) => {};
+
+
+export function activate(fn: (dataTypes: ActionType[]) => void) {
+  console.log('activate!!!!');
+  watchEventCallback.callBack = fn;
+
   let event: string;
 
   for (let k in events) {
@@ -36,7 +44,12 @@ export function activate(callback: (data: any) => void) {
   }
 }
 
-export function diactivate() {
+export function diactivate(options: {isReset: boolean}) {
+  console.log('diactivate!!!!');
+  if (options.isReset === true) {
+    actionsList = [];
+  }
+
   let event: string;
 
   for (let k in events) {

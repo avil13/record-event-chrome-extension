@@ -4,6 +4,7 @@ import { Router, Link } from 'preact-router';
 import { createHashHistory } from 'history';
 
 import IndexPage from './pages';
+import BottomMenu from './modules/BottomMenu';
 
 const Main = (
 <div>
@@ -16,10 +17,8 @@ const Main = (
     <IndexPage path='/' />
   </Router>
   <div className='navigation-bar bottom box'>
-    <button type='button' className='btn'>Record</button>
-    <button type='button' className='btn'>Copy</button>
-    <button type='button' className='btn'>Clear</button>
-    </div>
+    <BottomMenu />
+  </div>
 </div>
 );
 
