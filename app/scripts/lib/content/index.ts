@@ -2,7 +2,7 @@ import { normalizeActionsList } from './lib/normalize-actions-list';
 import { getCssPath } from './lib/get-css-path';
 import { events } from './lib/events';
 import { ActionType } from './types';
-import { getCodeByActions } from './lib/get-code-by-actions';
+// import { getCodeByActions } from './lib/get-code-by-actions';
 
 let actionsList: ActionType[] = [];
 
@@ -23,7 +23,7 @@ function watchEventCallback(ev: MouseEvent & { path: Element[] }) {
   // console.log(getCodeByActions(actionsList));
 }
 
-export function activate() {
+export function activate(callback: (data: any) => void) {
   let event: string;
 
   for (let k in events) {

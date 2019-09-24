@@ -9,16 +9,16 @@ body {
   font-size: 1rem;
   color: #444;
   position: relative;
-  padding-top: 40px;
-  padding-bottom: 40px;
 }
 
 #app {
   transition: 1;
-  width: 480px;
-  height: 580px;
+  width: 520px;
   padding: 4px;
   margin: 0 auto;
+  max-width: 100%;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 pre.language-js {
@@ -28,13 +28,13 @@ pre.language-js {
 }
 
 .btn {
-  background-color:rgb(38, 166, 154);
-  border-color:rgb(255, 255, 255);
+  box-shadow: 0 0 0 1px rgb(38, 166, 154);
+  // border-color:rgb(255, 255, 255);
   border-radius: 2px;
   border-style:none;
   border-width:0px;
   border-image-outset:0px;
-  color:rgb(255, 255, 255);
+  color:rgb(38, 166, 154);
   cursor:pointer;
   display:inline-block;
   position:relative;
@@ -60,7 +60,7 @@ pre.language-js {
 .navigation-bar {
   width: 100%;
   padding: 4px 2px;
-  background-color: rgba(222, 222, 222, 0.2);
+  background-color: rgba(250, 250, 250, 0.95);
   position: fixed;
   left: 0;
   right: 0;

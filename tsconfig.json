@@ -9,7 +9,11 @@
     "jsx": "react",
     "jsxFactory": "h",
     "lib": ["dom", "es2017"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": [
+      "chrome",
+      "preact"
+    ]
   },
   "include": [
     "app/scripts/**/*.ts",
