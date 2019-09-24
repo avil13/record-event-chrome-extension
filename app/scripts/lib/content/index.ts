@@ -29,8 +29,9 @@ watchEventCallback.callBack = (dataTypes: ActionType[]) => {};
 
 
 export function activate(fn: (dataTypes: ActionType[]) => void) {
-  console.log('activate!!!!');
   watchEventCallback.callBack = fn;
+
+  watchEventCallback.callBack(actionsList);
 
   let event: string;
 
@@ -45,7 +46,8 @@ export function activate(fn: (dataTypes: ActionType[]) => void) {
 }
 
 export function diactivate(options: {isReset: boolean}) {
-  console.log('diactivate!!!!');
+  watchEventCallback.callBack(actionsList);
+
   if (options.isReset === true) {
     actionsList = [];
   }
@@ -60,4 +62,9 @@ export function diactivate(options: {isReset: boolean}) {
       window.removeEventListener(event, watchEventCallback, true);
     }
   }
+}
+
+export function getList() {
+  watchEventCallback.callBack(actionsList);
+  return actionsList;
 }

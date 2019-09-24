@@ -10,6 +10,10 @@ export class ActionsWrapper {
     }
   }
 
+  pause() {
+    this.sendMessage({ action: actions.PAUSE });
+  }
+
   stop() {
     this.sendMessage({ action: actions.STOP });
   }

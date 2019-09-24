@@ -1,7 +1,7 @@
 // Enable chromereload by uncommenting this line:
 import 'chromereload/devonly';
 
-import { activate, diactivate } from './lib/content';
+import { activate, diactivate, getList } from './lib/content';
 import actions from './lib/actions/actions';
 
 // console.log(`'Allo 'Allo! Content script`);
@@ -24,6 +24,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     diactivate({ isReset: true });
   } else if (request.action === actions.PAUSE) {
     diactivate({ isReset: false });
+  } else if (request.action === actions.GET_LIST) {
+    getList();
   }
 });
 
