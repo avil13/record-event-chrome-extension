@@ -2,69 +2,101 @@ import { normalizeActionsList } from './lib/normalize-actions-list';
 import { getCssPath } from './lib/get-css-path';
 import { events } from './lib/events';
 import { ActionType } from './types';
+import { ActionsContentWrapper } from '../actions/actions-content-wrapper';
+import { actions } from '../actions/actions';
 // import { getCodeByActions } from './lib/get-code-by-actions';
 
-let actionsList: ActionType[] = [];
+export class ListContentActions {
+  private static _actionsList: ActionType[] = [];
 
-function watchEventCallback(ev: MouseEvent & { path: Element[] }) {
-  const { path, type, target } = ev;
-  const value = (target as HTMLInputElement).value || '';
+  get actionsList(): ActionType[] {
+    return ListContentActions._actionsList;
+  }
 
-  actionsList.push({
-    event: type,
-    value,
-    selector: getCssPath(path),
-    location: window.location.href,
-    time: Date.now()
-  });
+  set actionsList(val: ActionType[]) {
+    ListContentActions._actionsList = val;
+  }
 
-  actionsList = normalizeActionsList(actionsList);
+  private watchEventCallback(ev: MouseEvent & { path: Element[] }) {
+    const { path, type, target } = ev;
+    const value = (target as HTMLInputElement).value || '';
 
-  watchEventCallback.callBack(actionsList);
+    this.actionsList.push({
+      event: type,
+      value,
+      selector: getCssPath(path),
+      location: window.location.href,
+      time: Date.now()
+    });
 
-  // console.log(getCodeByActions(actionsList));
-}
+    this.actionsList = normalizeActionsList(this.actionsList);
+    this.sendList(this.actionsList);
+    // console.log(getCodeByActions(this.actionsList));
+  }
 
-watchEventCallback.callBack = (dataTypes: ActionType[]) => {};
+  /**
+   *
+   * @param list
+   */
+  sendList(list: ActionType[]) {
+    ActionsContentWrapper.sendMessage({
+      action: actions.LIST,
+      list: list
+    });
+  }
 
+  /**
+   *
+   * @param options
+   */
+  activate(options: { isReset: boolean }) {
+    debugger;
+    if (options.isReset === true) {
+      this.actionsList = [];
+    }
 
-export function activate(fn: (dataTypes: ActionType[]) => void) {
-  watchEventCallback.callBack = fn;
+    this.sendList(this.actionsList);
 
-  watchEventCallback.callBack(actionsList);
+    let event: string;
 
-  let event: string;
+    for (let k in events) {
+      if (events.hasOwnProperty(k)) {
+        // @ts-ignore
+        event = events[k];
 
-  for (let k in events) {
-    if (events.hasOwnProperty(k)) {
-      // @ts-ignore
-      event = events[k];
-
-      window.addEventListener(event, watchEventCallback, true);
+        window.addEventListener(event, this.watchEventCallback, true);
+      }
     }
   }
-}
 
-export function diactivate(options: {isReset: boolean}) {
-  watchEventCallback.callBack(actionsList);
+  /**
+   *
+   * @param options
+   */
+  diactivate(options: { isReset: boolean }) {
+    this.sendList(this.actionsList);
 
-  if (options.isReset === true) {
-    actionsList = [];
-  }
+    if (options.isReset === true) {
+      this.actionsList = [];
+    }
 
-  let event: string;
+    let event: string;
 
-  for (let k in events) {
-    if (events.hasOwnProperty(k)) {
-      // @ts-ignore
-      event = events[k];
+    for (let k in events) {
+      if (events.hasOwnProperty(k)) {
+        // @ts-ignore
+        event = events[k];
 
-      window.removeEventListener(event, watchEventCallback, true);
+        window.removeEventListener(event, this.watchEventCallback, true);
+      }
     }
   }
-}
 
-export function getList() {
-  watchEventCallback.callBack(actionsList);
-  return actionsList;
+  /**
+   *
+   */
+  getList() {
+    this.sendList(this.actionsList);
+    return this.actionsList;
+  }
 }

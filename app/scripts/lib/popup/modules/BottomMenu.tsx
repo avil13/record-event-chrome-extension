@@ -1,13 +1,13 @@
 import { h, render, Component } from 'preact';
-import { ActionsWrapper } from '../../actions';
+import { ActionsPopupWrapper } from '../../actions/actions-popup-wrapper';
 
 
 export default class BottomMenu extends Component {
-  action: ActionsWrapper;
+  action: ActionsPopupWrapper;
 
   constructor () {
     super();
-    this.action = new ActionsWrapper();
+    this.action = new ActionsPopupWrapper();
   }
 
   runRecord() {

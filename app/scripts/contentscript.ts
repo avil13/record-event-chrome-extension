@@ -1,35 +1,33 @@
 // Enable chromereload by uncommenting this line:
 import 'chromereload/devonly';
 
-import { activate, diactivate, getList } from './lib/content';
-import actions from './lib/actions/actions';
+import { ListContentActions } from './lib/content';
+import { actions } from './lib/actions/actions';
+import { ActionsContentWrapper } from './lib/actions/actions-content-wrapper';
 
-// console.log(`'Allo 'Allo! Content script`);
-
-const sendMessage = (data: any) => {
-  chrome.runtime.sendMessage(data, function(response) {
-    // console.log(response);
-  });
-};
+const listActions = new ListContentActions();
 
 // При активации запускаем слежение за эвентами
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+ActionsContentWrapper.onMessage((request, sender, sendResponse) => {
   // console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension');
   // if (request.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
-
-  // debugger;
-  if (request.action === actions.START) {
-    activate(sendMessage);
-  } else if (request.action === actions.STOP) {
-    diactivate({ isReset: true });
-  } else if (request.action === actions.PAUSE) {
-    diactivate({ isReset: false });
-  } else if (request.action === actions.GET_LIST) {
-    getList();
+  switch (request.action) {
+    case actions.START:
+        listActions.activate({ isReset: true });
+      break;
+    case actions.STOP:
+        listActions.diactivate({ isReset: true });
+      break;
+    case actions.PAUSE:
+        listActions.diactivate({ isReset: false });
+      break;
+    case actions.GET_LIST:
+        listActions.getList();
+      break;
   }
 });
 
 // устанавливаем событие отмены слежки в случае если вкладка потеряла фокус то запись ставится на паузу
 document.addEventListener('visibilitychange', ev => {
-  diactivate({ isReset: true });
+  listActions.diactivate({ isReset: true });
 });
