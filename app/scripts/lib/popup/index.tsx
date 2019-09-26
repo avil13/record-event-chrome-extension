@@ -6,6 +6,10 @@ import { createHashHistory } from 'history';
 import IndexPage from './pages';
 import BottomMenu from './modules/BottomMenu';
 
+import Store from './store';
+
+const store = new Store();
+
 const Main = (
 <div>
   <nav class='navigation-bar top box'>

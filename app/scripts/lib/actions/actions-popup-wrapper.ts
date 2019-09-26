@@ -1,6 +1,8 @@
-import {actions, messageType } from './actions';
+import { actions, messageType } from './actions';
+import { ActionsWrapper } from './actions-wrapper';
 
-export class ActionsPopupWrapper {
+export class ActionsPopupWrapper extends ActionsWrapper {
+
   static sendMessage(msg: messageType) {
     if (!chrome.tabs) {
       throw new Error('No tabs extension error');
