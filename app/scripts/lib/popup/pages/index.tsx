@@ -1,29 +1,34 @@
 import { h, render, Component } from 'preact';
 import Code from '../modules/Code';
 
+import Store from '../store';
+import { getCodeByActions } from '../../content/lib/get-code-by-actions';
+
+const store = new Store();
+
 // Create your app
-const code = `
-// hello world
-const x = 2;
-let y = 1;
-var z = () => 0;
+const code = getCodeByActions(store.list);
 
+interface IndexPageState {
+  code: string;
+}
 
-// Inject your application into the an element with the id
-// Make sure that such an element exists in the dom ;
-# code page
-const app = <div>
-  <h1>Hi man</h1>
-  <Code code={code}/>
-</div>;
-`;
+export default class IndexPage extends Component<{}, IndexPageState> {
+  constructor() {
+    super();
+    this.state = {
+      code: 'xxx'
+    };
 
+    store.on('list', (list) => {
+      console.log('list :', list);
+    });
+  }
 
-export default class IndexPage extends Component {
-  render() {
+  render(props: {}, state: IndexPageState) {
     return (
       <div>
-        <Code code={code}/>
+        <Code code={state.code}/>
       </div>
     );
   }
