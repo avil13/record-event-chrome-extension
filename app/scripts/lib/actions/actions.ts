@@ -13,3 +13,5 @@ export type messageType = {
   list?: any[];
   [key: string]: any;
 };
+
+export const PORT_NAME = 'record_event';

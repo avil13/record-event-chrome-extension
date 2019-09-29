@@ -4,18 +4,21 @@ import { ActionType } from '../content/types';
 
 // ActionsPopupWrapper
 
-export type StateType = {
-  _id: number;
+export interface StateType {
+  id: number;
   list: ActionType[];
-};
+  [key: string]: any;
+}
 
 export default class Store {
   private static _instance: Store;
 
   private readonly action: ActionsPopupWrapper;
 
+  private readonly _state: { [key: string]: Function[] } = {};
+
   private readonly state: StateType = {
-    _id: 0,
+    id: 0,
     list: []
   };
 
@@ -44,21 +47,41 @@ export default class Store {
   private boot() {
     this.action.onMessage((ev: messageType) => {
       if (ev.action === actions.LIST && ev.list) {
-        this.setList(ev.list);
+        this.$.list = ev.list;
       }
     });
-  }
 
-  private set updatedKey(key: keyof StateType) {
-    if (this.subscribers[key]) {
-      this.subscribers[key].forEach(fn => {
-        fn(this.state[key]);
-      });
+    const self = this;
+
+    for (let key in this.state) {
+      if (this.state.hasOwnProperty(key)) {
+        this._state[key] = this.state[key];
+
+        if (this.subscribers[key] === undefined) {
+          this.subscribers[key] = [];
+        }
+
+        Object.defineProperty(this._state, key, {
+          enumerable: true,
+          get() {
+            return self._state[key];
+          },
+          set(v) {
+            self._state[key] = v;
+            self.subscribers[key].forEach(fn => {
+              fn(self._state[key]);
+            });
+          }
+        });
+      }
     }
   }
 
-  //
+  get $() {
+    return this.state;
+  }
 
+  //
   on(key: string, handler: (v?: any) => void) {
     if (this.subscribers[key] === undefined) {
       this.subscribers[key] = [];
@@ -66,18 +89,10 @@ export default class Store {
     this.subscribers[key].push(handler);
   }
 
-  // Mutations
-  setList(list: ActionType[]) {
-    this.state.list = list;
-    this.updatedKey = 'list';
-  }
-
-  // Getters
-  get list(): ActionType[] {
-    return this.state.list;
-  }
-
-  get id() {
-    return this.state._id;
+  off(key: string, handler: (v?: any) => void) {
+    if (this.subscribers[key].includes(handler)) {
+      const index = this.subscribers[key].indexOf(handler);
+      this.subscribers[key].splice(index, 1);
+    }
   }
 }

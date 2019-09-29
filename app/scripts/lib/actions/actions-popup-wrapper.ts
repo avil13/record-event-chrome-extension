@@ -1,32 +1,50 @@
-import { actions, messageType } from './actions';
+import { actions, messageType, PORT_NAME } from './actions';
 import { ActionsWrapper } from './actions-wrapper';
 
 export class ActionsPopupWrapper extends ActionsWrapper {
+  private static _instance: ActionsPopupWrapper;
 
-  static sendMessage(msg: messageType) {
-    if (!chrome.tabs) {
-      throw new Error('No tabs extension error');
+  constructor() {
+    super();
+
+    if (ActionsPopupWrapper._instance) {
+      return ActionsPopupWrapper._instance;
     }
 
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      // @ts-ignore
-      chrome.tabs.sendMessage(tabs[0].id, msg, function(response: any) {
-        console.log(response);
+    if (!(this instanceof ActionsPopupWrapper)) {
+      return new ActionsPopupWrapper();
+    }
+
+    ActionsPopupWrapper._instance = this;
+  }
+
+  get port(): chrome.runtime.Port {
+    if (!this._port) {
+      if (!chrome.tabs) {
+        throw new Error('No tabs extension error');
+      }
+
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        this._port = chrome.tabs.connect(tabs[0].id as number, { name: PORT_NAME });
+
+        this._port.onMessage.addListener(msg => {
+          this._subscribers.forEach(fn => fn(msg));
+        });
       });
-    });
+    }
+    return this._port;
   }
 
   sendMessage(msg: messageType) {
-    ActionsPopupWrapper.sendMessage(msg);
+    this.port.postMessage(msg);
   }
 
   start() {
     this.sendMessage({ action: actions.START });
-
-    if (chrome.browserAction) {
-      chrome.browserAction.setBadgeText({ text: 'rec' });
-      chrome.browserAction.setBadgeBackgroundColor({ color: '#FF0000' });
-    }
+    // if (chrome.browserAction) {
+    //   chrome.browserAction.setBadgeText({ text: 'rec' });
+    //   chrome.browserAction.setBadgeBackgroundColor({ color: '#FF0000' });
+    // }
   }
 
   pause() {

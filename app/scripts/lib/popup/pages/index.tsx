@@ -7,7 +7,7 @@ import { getCodeByActions } from '../../content/lib/get-code-by-actions';
 const store = new Store();
 
 // Create your app
-const code = getCodeByActions(store.list);
+const code = getCodeByActions(store.$.list);
 
 interface IndexPageState {
   code: string;

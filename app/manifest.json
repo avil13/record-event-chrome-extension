@@ -50,6 +50,7 @@
     "history",
     "input",
     "tabCapture",
-    "webRequestBlocking"
+    "webRequestBlocking",
+    "storage"
   ]
 }

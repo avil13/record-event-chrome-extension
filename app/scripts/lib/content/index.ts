@@ -7,9 +7,11 @@ import { actions } from '../actions/actions';
 import throttle from '../../utils/trottle';
 // import { getCodeByActions } from './lib/get-code-by-actions';
 
+const actionsContentWrapper = new ActionsContentWrapper();
+
 const sendMessage = (list: ActionType[]) => {
   console.log('[list]=>', list);
-  ActionsContentWrapper.sendMessage({
+  actionsContentWrapper.sendMessage({
     action: actions.LIST,
     list: list
   });
