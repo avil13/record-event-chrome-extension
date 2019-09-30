@@ -83,8 +83,8 @@ export default class Store {
 
   //
   on(key: string, handler: (v?: any) => void) {
-    if (this.subscribers[key] === undefined) {
-      this.subscribers[key] = [];
+    if (this._state[key] === undefined) {
+      throw new Error(`"${key}" - wrong state name`);
     }
     this.subscribers[key].push(handler);
   }

@@ -51,6 +51,7 @@
     "input",
     "tabCapture",
     "webRequestBlocking",
-    "storage"
+    "storage",
+    "tabs"
   ]
 }
