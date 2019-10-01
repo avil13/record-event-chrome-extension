@@ -17,7 +17,7 @@ export default class IndexPage extends Component<{}, IndexPageState> {
   constructor() {
     super();
     this.state = {
-      code: 'xxx'
+      code: '// Hello world!!!'
     };
 
     store.on('list', (list) => {

@@ -23,6 +23,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/register": "^7.6.2",
     "@types/chrome": "^0.0.89",
     "babel-cli": "6.x.x",
     "babel-core": "6.x.x",

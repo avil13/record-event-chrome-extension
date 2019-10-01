@@ -1,8 +1,8 @@
-import { ActionsPopupWrapper } from '../actions/actions-popup-wrapper';
-import { messageType, actions } from '../actions/actions';
+import { ActionsPopup } from '../actions/actions-popup';
+import { messageType, actions } from '../actions/types';
 import { ActionType } from '../content/types';
 
-// ActionsPopupWrapper
+// ActionsPopup
 
 export interface StateType {
   id: number;
@@ -13,7 +13,7 @@ export interface StateType {
 export default class Store {
   private static _instance: Store;
 
-  private readonly action: ActionsPopupWrapper;
+  private readonly action: ActionsPopup;
 
   private readonly _state: { [key: string]: Function[] } = {};
 
@@ -37,7 +37,7 @@ export default class Store {
 
     this.state._id = Math.random();
 
-    this.action = new ActionsPopupWrapper();
+    this.action = new ActionsPopup();
 
     Store._instance = this;
 
@@ -52,11 +52,11 @@ export default class Store {
     });
 
     const self = this;
+    (this._state as any) = { ...this.state };
+    (this.state as any) = {};
 
-    for (let key in this.state) {
+    for (let key in this._state) {
       if (this.state.hasOwnProperty(key)) {
-        this._state[key] = this.state[key];
-
         if (this.subscribers[key] === undefined) {
           this.subscribers[key] = [];
         }
@@ -85,6 +85,9 @@ export default class Store {
   on(key: string, handler: (v?: any) => void) {
     if (this._state[key] === undefined) {
       throw new Error(`"${key}" - wrong state name`);
+    }
+    if (this.subscribers[key] === undefined) {
+      this.subscribers[key] = [];
     }
     this.subscribers[key].push(handler);
   }

@@ -2,13 +2,14 @@
 import 'chromereload/devonly';
 
 import { ListContentActions } from './lib/content';
-import { actions } from './lib/actions/actions';
-import { ActionsContentWrapper } from './lib/actions/actions-content-wrapper';
+import { actions } from './lib/actions/types';
+import { ActionsContent } from './lib/actions/actions-content';
 
 const listActions = new ListContentActions();
+const actionsContent = new ActionsContent();
 
 // При активации запускаем слежение за эвентами
-ActionsContentWrapper.onMessage((request, sender, sendResponse) => {
+actionsContent.onMessage((request, sender, sendResponse) => {
   // console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension');
   // if (request.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
   switch (request.action) {

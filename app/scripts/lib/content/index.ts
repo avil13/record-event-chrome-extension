@@ -2,16 +2,16 @@ import { normalizeActionsList } from './lib/normalize-actions-list';
 import { getCssPath } from './lib/get-css-path';
 import { events } from './lib/events';
 import { ActionType } from './types';
-import { ActionsContentWrapper } from '../actions/actions-content-wrapper';
-import { actions } from '../actions/actions';
+import { ActionsContent } from '../actions/actions-content';
+import { actions } from '../actions/types';
 import throttle from '../../utils/trottle';
 // import { getCodeByActions } from './lib/get-code-by-actions';
 
-const actionsContentWrapper = new ActionsContentWrapper();
+const actionsContent = new ActionsContent();
 
 const sendMessage = (list: ActionType[]) => {
   console.log('[list]=>', list);
-  actionsContentWrapper.sendMessage({
+  actionsContent.sendMessage({
     action: actions.LIST,
     list: list
   });

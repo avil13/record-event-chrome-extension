@@ -1,21 +1,21 @@
-import { actions, messageType, PORT_NAME } from './actions';
-import { ActionsWrapper } from './actions-wrapper';
+import { actions, messageType, PORT_NAME } from './types';
+import { ActionsBase } from './actions-base';
 
-export class ActionsPopupWrapper extends ActionsWrapper {
-  private static _instance: ActionsPopupWrapper;
+export class ActionsPopup extends ActionsBase {
+  private static _instance: ActionsPopup;
 
   constructor() {
     super();
 
-    if (ActionsPopupWrapper._instance) {
-      return ActionsPopupWrapper._instance;
+    if (ActionsPopup._instance) {
+      return ActionsPopup._instance;
     }
 
-    if (!(this instanceof ActionsPopupWrapper)) {
-      return new ActionsPopupWrapper();
+    if (!(this instanceof ActionsPopup)) {
+      return new ActionsPopup();
     }
 
-    ActionsPopupWrapper._instance = this;
+    ActionsPopup._instance = this;
   }
 
   get port(): chrome.runtime.Port {
@@ -36,7 +36,17 @@ export class ActionsPopupWrapper extends ActionsWrapper {
   }
 
   sendMessage(msg: messageType) {
-    this.port.postMessage(msg);
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      this._port = chrome.tabs.connect(tabs[0].id as number, { name: PORT_NAME });
+
+      this._port.postMessage(msg);
+
+      this._port.onMessage.addListener(msg => {
+        this._subscribers.forEach(fn => fn(msg));
+      });
+    });
+    // this.port.postMessage(msg);
   }
 
   start() {

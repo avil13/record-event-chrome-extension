@@ -1,16 +1,17 @@
 import { ActionType } from '../types';
 import { generateCode } from './generate-code';
 
-
 export function getCodeByActions(list: ActionType[]) {
-    let result = '';
+  let result = '';
 
-    result += generateCode({ event: '_start', selector: 'body' });
-    result += generateCode({ event: '_wait', selector: 'body' });
+  result += generateCode({ event: '_start', selector: 'body' });
+  result += generateCode({ event: '_wait', selector: 'body' });
 
+  if (Array.isArray(list)) {
     result += list.map(v => '  ' + generateCode(v)).join('\n\n');
+  }
 
-    result += generateCode({ event: '_end', selector: 'body' });
+  result += generateCode({ event: '_end', selector: 'body' });
 
-    return result;
+  return result;
 }
